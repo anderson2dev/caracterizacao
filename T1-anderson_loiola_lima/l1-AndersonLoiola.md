@@ -425,7 +425,3 @@ func main() {
 
 ---
 
-## Aspectos sintáticos
-
-
-
