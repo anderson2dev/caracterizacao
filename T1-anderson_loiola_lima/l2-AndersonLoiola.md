@@ -70,7 +70,112 @@ iex> if nil do
 
 ---
 
-#### Tipos de dados
+
+
+### Sintaxe
+
+#### Palavras reservadas
+
+o elixir possui as seguintes palavras reservadas:
+
+*true*, *false*, *nil*  - que são usadas como atomos
+
+*when*, *or*, *not*, *in* - que são usadas como **operators**
+
+*fn* - usado para definição de funções anonimas
+
+*do*, *end*, *catch*, *rescue*, *after*, *else* - Utilizados em blocos **do** e **end**
+
+---
+
+#### Aliases
+
+Aliases são construtos que se expandem para atomos em tempo de compilação, por exemplo o alias String é expandido para ```:"Elixir.String" ```. Aliases  tem que começar com um caractere ASCII maiúsculo  que pode ser seguido por qualquer outro caracteres ascii seja ele letra, número ou _. 
+
+---
+
+#### Blocos
+
+Blocos em elixir são multiplas expressões separadas por quebra de linhas ou ```;```. Um novo bloco pode ser criado a qualquer utilizando parenteses.
+
+####  Flecha (```->```)
+
+A ``` -> ``` é utilizada para estabelecer um relacionamento entre a parte esquerda da flecha e a parte direita, geralmento definidas como claúsulas. O lado esquesquerdo pode possui zero, um , ou mais argumentos argumentos e o lado direito é composto por zero, uma ou mais expressões  separados por quebra de linha.
+
+O ```->```  pode aparecer uma ou mais vezes entre os seguintes **terminators**:  { *do*, *end*, *fn*  }
+
+Exemplo:
+
+```elixir
+
+case 1 do
+  2 -> 3
+  4 -> 5
+end
+
+cond do
+  true -> false
+end
+
+```
+
+### Padrões de nomeação
+
+É recomendado que desenvolvedores de elixir utilizem **snake_case** quando definindo variáveis, nomes de funções e atributos de módulos, 
+aliases, comumente utilizados como nomes de módulo são uma exceção e devem seguir o padrão cammel case.
+
+```elixir
+    # capitalized module name
+    defmodule SomeModule
+    end
+
+    # example of snake cased 
+    my_name = "D4C"
+```
+
+Além disso temos o uso do underscore "_" , onde uma variável ou função que não deve ser utilizada deve sempre começar com "_"
+
+exemplo:
+
+```elixir
+
+defmodule Example do
+
+  def _wont_be_imported do
+
+    :oops
+
+  end
+
+end
+
+import Example
+
+_wont_be_imported()
+** (CompileError) iex:1: undefined function _wont_be_imported/0
+
+```
+
+O uso da exclamação (!) no nome da função implica que essa função vai dar throw em uma exceção em caso de falha
+
+exemplo:
+
+```elixir
+File.read("file.txt")
+{:ok, "file contents"}
+
+File.read("no_such_file.txt")
+{:error, :enoent}
+
+File.read!("file.txt")
+"file contents"
+
+File.read!("no_such_file.txt")
+# (File.Error) could not read file no_such_file.txt: no such file or directory
+```
+
+
+### Tipos de dados
 
 A linguagem elixir possui como tipo de dados:
 
@@ -150,20 +255,9 @@ A linguagem elixir possui como tipo de dados:
     </tbody>
 </table>
 
-#### Ortogonalidade
-
-#### Frameworks
+### Frameworks
 
 1. [Phoenix framework](https://www.phoenixframework.org/)
 1. [Nerves](https://www.nerves-project.org/)
 1. [Sugar](https://sugar-framework.github.io/)
 
-Fatores:
-- Simplicidade
-- Ortogonalidade
-- Estruturas de controle
-- Estruturas e tipos de dados
-- Aspectos sintáticos
-
-
-#### Redigibilidade
