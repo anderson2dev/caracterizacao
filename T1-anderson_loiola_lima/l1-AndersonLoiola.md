@@ -8,7 +8,11 @@ Go é uma linguagem compilada e estaticamente tipada desenvolvida pelo Google e 
 
 Go possui uma certa similaridade com o C (tanto sintática como em algumas features como por exemplo controle de ponteiros), mas também possui caracteristicas como segurança de memória (memory safety), garbage collection, structural typing e suporte a concorrencia no estilo [CSP](https://en.wikipedia.org/wiki/Communicating_sequential_processes).
 
+---
+
 ## Atributos de qualidade
+
+---
 
 ### Legibilidade
 
@@ -61,9 +65,31 @@ func (s *StopWatch) Start() {
 }
 ```
 
+Onde a struct StopWatch e o método Start ligado a ela são públicos mas os atributos da struct não, pois começam respectivamente com a primeira letra maiúscula  (indicando que a visibilidade fora do pacote é pública)  e minúscula (indicando que a visibilidade fora do pacote é privada).
+
+```go
+package main
+
+import "timer"
+
+func main() {
+    clock := new(timer.StopWatch)
+    clock.Start()
+    if clock.running { // ILLEGAL
+        // …
+    }
+}
+
+/**  Invocar método de visibilidade privada fora do pacote gera a seguinte exceção: ../main.go:8:15: clock.running undefined (cannot refer to unexported field or method clock.running) */
+```
+
+---
+
 ### Simplicidade
 
 Go é uma linguagem extremamente simples e rápida de se aprenter uma vez que ela é extremamente enxuta (possuindo apenas 25 palavras reservadas), e possui uma sintaxe bem natural.
+
+---
 
 ### Ortogonalidade
 
@@ -84,7 +110,7 @@ Já o principio de se manter uma maneira padronizada de se comunicar de maneira 
 ```go
 type clients []string
 
-func (c &clients) AddClient(s string): bool {
+func (c *clients) AddClient(s string): bool {
   /** adds client*/
 }
 
@@ -97,15 +123,114 @@ O código acima define as operações operações que podem ser implementadas pe
 
 Outro exemplo de definição de interface é
 
+---
+
 ### Estruturas de controle
 
-### Estruturas e tipos de dados
+Na linguagem de programação go existem três tipo de estrutura de controle que são:
 
-#### Tipos de dados
+#### Estruturas de controle sequencial
+
+#### Estruturas de controle lógico
+
+Nessa categoria encontramos estruturas que alteram o fluxo da aplicação baseado em condições lógicas, dentro dessa categoria na golang temos as instruções *if* *switch* else *else*.
+
+Exemplo:
+
+```go
+/** switch example */
+package main
+import "fmt"
+
+func choise(option int) {
+  switch(option) {
+    case 1:
+      fmt.Println("One")
+    case 2:
+      fmt.Println("Two")
+    case 3:
+      fmt.Println("Three")
+    default:
+      fmt.Println("Invalid option")
+  }
+
+}
+
+func main() {
+  i := 1
+  choise(i)
+}
+
+```
+
+```go
+
+/** If example  */
+package main
+
+import "fmt"
+
+func verify(age int) {
+ if age >= 18 {
+  fmt.Println("Legal age")
+ } else {
+  fmt.Println("Minor")
+ }
+}
+
+func main() {
+ var age int
+ fmt.Scanf("%d", &age)
+ verify(age)
+}
+```
+
+### Estruturas de controle iterativo
+
+Dentro deste tipo de categoria diferente de outras linguagens de programação que possuem outros tipos de laços como por exemplo: *while* e *do while* na golang nós temos o laço iterativo condicional *for*.
+
+```go
+
+package main
+
+import (
+  "fmt"
+)
+
+func main() {
+
+  /**
+    for example written in go
+  */
+  for i:= 3; i>0; i-- {
+    fmt.Println(i)
+  }
+
+  /** 
+    "While (true)" equivalent written in go
+  */
+  
+  var x int
+  for true {
+    fmt.Println("Dummy example")
+    fmt.Scanf("%d", &x)
+    if x == 1 {
+      break
+    }
+  }
+}
+
+```
+
+---
+
+## Estruturas e tipos de dados
+
+### Tipos de dados
 
 Tipos de dados especificam o que uma variável válida em go pode armazenar, podemos subdividr os tipos de dados presentes na linguagem golang em 4 tipos:
 
-<table>
+<table style="border: 1px solid black">
   <tr>
     <td> Nome: </td>
     <td> Descrição: </td>
@@ -128,11 +253,13 @@ Tipos de dados especificam o que uma variável válida em go pode armazenar, pod
     </tr>
 </table>
 
-##### Números
+---
+
+### Números
 
 Inteiros (Integers):  Na linguagem Go, ambos os números positivos e negativos estão disponíveis, onde um inteiro com sinal é representado por um int e um inteiro sem sinal é representado por uint
 
-<table>
+<table style="border: 1px solid black">
 <tr>
   <td> Tipo: </td>
   <td> Descrição </td>
@@ -187,9 +314,11 @@ Inteiros (Integers):  Na linguagem Go, ambos os números positivos e negativos e
 </tr>
 </table>
 
+---
+
 Números de ponto flutuante:  Na linguagem go, números de ponto flutuante são divididos em duas categorias conforme mostrado abaixo
 
-<table>
+<table style="border: 1px solid black">
 <tr>
   <td>Tipo:</td>
   <td> Descrição: </td>
@@ -202,13 +331,13 @@ Números de ponto flutuante:  Na linguagem go, números de ponto flutuante são 
 </tr>
 <tr>
   <td> complex128 </td>
-  <td> 
+  <td>
     Ambas as partes real e imaginária possuem 64 bits
   </td>
 </tr>
 </table>
 
-<table>
+<table style="border: 1px solid black">
 <tr>
   <td>Tipo:</td>
   <td> Descrição: </td>
@@ -223,14 +352,80 @@ Números de ponto flutuante:  Na linguagem go, números de ponto flutuante são 
 </tr>
 </table>
 
-##### Booleanos
+---
+
+#### Booleanos
 
 Podem assumir os valores true ou false
 
+---
+
+## Estruturas
+
+Diferente de linguagens de programação orientadas a objeto a golang adota uma feature bem similar ao **c** para criação de tipos abstratos de dados mais complexo, e o nome dessa feature é [structs](https://www.geeksforgeeks.org/structures-in-golang/).
+
+Por meio da utilização de structs podemos criar tipos compostos de objetos como por exemplo:
+
+```go
+/** Exemplo de struct em Go */
+type Person struct {
+  string name
+  int age
+}
+
+```
+
+```c
+/** Exemplo de struct em c */
+typedef struct Person {
+  char[] name;
+  int age;
+} tPerson;
+```
+
+Apesa da similaridade entre as structs em c e as structs em go há uma diferença fundamental entre elas, que é que structs podem ter metódos em go enquanto em c não, exemplo:
+
+```go
+/** 
+* Neste exemplo temos uma struct "People"
+* Que tem como metódo o addPerson 
+*/
+package main
+
+import "fmt"
+
+type Person struct {
+  name string
+  age int
+}
 
 
-#### Estruturas
+type People struct {
+  group []Person
+}
+
+func CreatePeople() *People{
+  return &People{}
+}
+
+func (p *People) addPerson(name string, age int) Person {
+  person := Person{name: name, age: age}
+  p.group = append(p.group, person)
+  return person
+}
+
+func main() {
+  p := CreatePeople()
+  p.addPerson("joao", 19)  
+  fmt.Println(p.group)
+  p.addPerson("Homer", 22)
+  fmt.Println(p.group)
+}
+```
+
+---
+
+## Aspectos sintáticos
 
 
 
-### Aspectos sintáticos
